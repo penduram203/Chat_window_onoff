@@ -1,0 +1,52 @@
+/* チャット表示/非表示切り替えボタン */
+#toggle-chat-button {
+    position: fixed;
+    /* ⚙️アイコン(left:10px, width:40px)の隣に配置するため、10px + 40px + 10px(間隔) = 60px に設定 */
+    left: 50px; 
+    bottom: 40px;
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    z-index: 15;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    opacity: 0.1;
+    transition: opacity 0.0s, background-color 0.0s;
+}
+
+#toggle-chat-button:hover {
+    opacity: 1;
+    background-color: #444;
+}
+
+/* ボタンがアクティブ（チャット透過中）な時のスタイル */
+#toggle-chat-button.active {
+    background-color: #000000;
+    opacity: 0.1;
+}
+
+/* --- ここからが変更箇所 --- */
+
+/* 透過効果のためのトランジションを通常時に設定 */
+#chat,
+#form_sheld,
+#sheldheader {
+    /* opacity(透明度)とvisibility(可視性)を0.2秒かけて変化させる */
+    transition: opacity 0.0s ease, visibility 0.0s ease;
+}
+
+/* bodyにこのクラスが付くと、対象要素が透過される */
+body.chat-window-is-hidden #chat,
+body.chat-window-is-hidden #form_sheld,
+body.chat-window-is-hidden #sheldheader {
+    opacity: 0 !important; /* 要素を完全に透明にする */
+    visibility: hidden !important; /* スクリーンリーダーなどから隠し、レイアウトスペースは維持する */
+    pointer-events: none !important; /* 透明な時に下の要素をクリックできるようにする */
+}

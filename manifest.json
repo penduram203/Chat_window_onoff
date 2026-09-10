@@ -1,0 +1,12 @@
+{
+    "display_name": "Chat Window On/Off",
+    "js": "chat_window_onoff.js",
+    "css": "chat_window_onoff.css",
+    "author": "AI Assistant",
+    "version": "1.1.0",
+    "description": "Adds a button to toggle the visibility of the chat window.",
+    "auto_update": true,
+    "hooks": {
+        "install": "onInstall"
+    }
+}
