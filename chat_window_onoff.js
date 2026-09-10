@@ -1,19 +1,60 @@
 // このファイルは SillyTavern の公式拡張機能ローダー（動的 import）経由で読み込まれる前提。
 // classic <script> タグでの直接読み込みは行わないこと（export構文が構文エラーになるため）。
 
+const MODULE_NAME = 'chat_window_onoff';
+const OLD_STORAGE_KEY = 'chatWindowHiddenState';
+
+/**
+ * 設定を取得・初期化（旧localStorageからの自動マイグレーションを含む）
+ */
+function getSettings() {
+    const context = SillyTavern.getContext();
+
+    // extensionSettings 内に自拡張機能用の空間を確保
+    if (!context.extensionSettings[MODULE_NAME]) {
+        context.extensionSettings[MODULE_NAME] = {
+            isHidden: false,
+        };
+    }
+
+    const settings = context.extensionSettings[MODULE_NAME];
+
+    // 旧 localStorage からの自動マイグレーション処理
+    try {
+        const oldState = localStorage.getItem(OLD_STORAGE_KEY);
+        if (oldState !== null) {
+            settings.isHidden = (oldState === 'true');
+            context.saveSettingsDebounced();
+            localStorage.removeItem(OLD_STORAGE_KEY); // 移行完了後に旧データを消去
+            console.log('[Chat Window On/Off] 旧localStorageからextensionSettingsへの移行を完了しました。');
+        }
+    } catch (e) {
+        console.error('[Chat Window On/Off] localStorageからのデータ移行中にエラーが発生しました:', e);
+    }
+
+    return settings;
+}
+
+/**
+ * 設定をサーバー側へ保存
+ */
+function saveSettings(settings) {
+    try {
+        const context = SillyTavern.getContext();
+        context.extensionSettings[MODULE_NAME] = settings;
+        context.saveSettingsDebounced();
+    } catch (e) {
+        console.error('[Chat Window On/Off] 設定の保存に失敗しました:', e);
+    }
+}
+
 export async function onInstall() {
     console.log('[Chat Window On/Off] onInstall フックが呼び出されました。初回セットアップを行います。');
-
-    const STORAGE_KEY = 'chatWindowHiddenState';
     try {
-        if (localStorage.getItem(STORAGE_KEY) === null) {
-            localStorage.setItem(STORAGE_KEY, 'false');
-            console.log('[Chat Window On/Off] 初期状態（非透過）を設定しました。');
-        }
+        getSettings();
     } catch (e) {
         console.error('[Chat Window On/Off] onInstall中の初期化に失敗しました:', e);
     }
-
     if (typeof toastr !== 'undefined') {
         toastr.success('Chat Window On/Off 拡張機能がインストールされました。');
     }
@@ -28,12 +69,12 @@ export async function onInstall() {
 function initChatWindowToggle() {
     console.log('チャットウィンドウ透過切り替え拡張機能: 初期化開始');
 
-    const STORAGE_KEY = 'chatWindowHiddenState';
-
     // 既にボタンが存在する場合は多重生成しない（再読み込み・多重importの保険）
     if (document.getElementById('toggle-chat-button')) {
         return;
     }
+
+    const settings = getSettings();
 
     const toggleButton = document.createElement('button');
     toggleButton.id = 'toggle-chat-button';
@@ -42,30 +83,22 @@ function initChatWindowToggle() {
     document.body.appendChild(toggleButton);
     console.log('💡 アイコンボタンをDOMに追加しました。');
 
+    // 保存された状態の復元・反映
+    if (settings.isHidden) {
+        document.body.classList.add('chat-window-is-hidden');
+        toggleButton.classList.add('active');
+        console.log('保存された状態（透過）を復元しました。');
+    }
+
     toggleButton.addEventListener('click', () => {
         document.body.classList.toggle('chat-window-is-hidden');
-
         const isHidden = document.body.classList.contains('chat-window-is-hidden');
         toggleButton.classList.toggle('active', isHidden);
 
-        try {
-            localStorage.setItem(STORAGE_KEY, isHidden);
-            console.log(`チャットウィンドウの状態を保存: ${isHidden ? '透過' : '不透過'}`);
-        } catch (e) {
-            console.error('localStorageへの保存に失敗しました:', e);
-        }
+        settings.isHidden = isHidden;
+        saveSettings(settings);
+        console.log(`チャットウィンドウの状態を保存: ${isHidden ? '透過' : '不透過'}`);
     });
-
-    try {
-        const savedState = localStorage.getItem(STORAGE_KEY);
-        if (savedState === 'true') {
-            document.body.classList.add('chat-window-is-hidden');
-            toggleButton.classList.add('active');
-            console.log('保存された状態（透過）を復元しました。');
-        }
-    } catch (e) {
-        console.error('localStorageからの状態復元に失敗しました:', e);
-    }
 }
 
 if (document.readyState === 'loading') {
