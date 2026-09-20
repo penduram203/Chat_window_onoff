@@ -86,7 +86,7 @@
     /* スクロールバーを強制表示（テーマによる非表示化を防ぐ） */
     #chat::-webkit-scrollbar {
         display: block !important;
-        width: 12px !important;
+        width: 36px !important;
     }
     #chat::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.2) !important;
