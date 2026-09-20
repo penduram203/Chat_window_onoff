@@ -98,8 +98,4 @@
     #chat::-webkit-scrollbar-thumb:hover {
         background: rgba(220, 220, 220, 0.8) !important;
     }
-    #chat {
-        scrollbar-width: thin !important;
-        scrollbar-color: rgba(200, 200, 200, 0.5) rgba(0, 0, 0, 0.2) !important;
-    }
 }
