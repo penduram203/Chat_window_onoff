@@ -32,72 +32,56 @@
     opacity: 0.1;
 }
 
-/*  --- ここからが変更箇所 ---  */
-/*  透過効果のためのトランジションを通常時に設定  */
-#chat, #form_sheld, #sheldheader {
-    /*  opacity(透明度)とvisibility(可視性)を0.2秒かけて変化させる  */
-    transition: opacity 0.0s ease, visibility 0.0s ease;
-}
-
-/*  bodyにこのクラスが付くと、対象要素が透過される  */
-body.chat-window-is-hidden #chat,
-body.chat-window-is-hidden #form_sheld,
-body.chat-window-is-hidden #sheldheader {
-    opacity: 0 !important; /*  要素を完全に透明にする  */
-    visibility: hidden !important; /*  スクリーンリーダーなどから隠し、レイアウトスペースは維持する  */
-    pointer-events: none !important; /*  透明な時に下の要素をクリックできるようにする */
-}
-
 /* ============================================================ */
 /* 1. 全てのメッセージのアバターを常に非表示                       */
 /* ============================================================ */
-/* 「ボタンを押さなくても」= 常時非表示にするため、クラス依存なし */
 .mes .mesAvatarWrapper,
 .mesAvatarWrapper {
     display: none !important;
 }
-
-/* アバター分の余白が残る場合に備えて左余白も詰める（任意） */
 .mes {
     padding-left: 0 !important;
 }
 
 /* ============================================================ */
-/* 2. スクロールバーを画面右端に移動しつつ、チャット位置は維持      */
+/* 2. スクロールバーだけを画面右端に移動（チャット幅は維持）        */
 /* ============================================================ */
 
-/* #sheld をビューポート全域に広げ、ここでスクロールを担当させる */
-#sheld {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    /* 中央配置を維持するため、はみ出し分を負のマージンで相殺 */
-    margin-left: calc(50% - 50vw) !important;
-    margin-right: calc(50% - 50vw) !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+/* チャットの元の横幅を CSS 変数で定義（必要に応じて調整） */
+:root {
+    /* SillyTavern のチャット幅設定に合わせる。デフォルトは 900px 前後 */
+    --cw-content-width: 900px;
 }
 
-/* #chat 側ではスクロールさせない（内部スクロールバーを消す） */
-#chat {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: visible !important;
-    margin: 0 !important;
+/* #chat を画面端まで拡張し、内側にパディングを追加して
+   コンテンツの見た目を元の幅・中央寄せのまま維持する */
+@media (min-width: 1001px) {
+    #chat {
+        /* 画面いっぱいに広げる */
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+
+        /* 左右に「(画面幅 - コンテンツ幅) / 2」のパディングを追加
+           → コンテンツは元の中央寄せ位置・幅のまま */
+        padding-left: calc((100vw - var(--cw-content-width)) / 2) !important;
+        padding-right: calc((100vw - var(--cw-content-width)) / 2) !important;
+
+        /* パディングを幅に含める（重要なポイント） */
+        box-sizing: border-box !important;
+
+        /* スクロールはここで行う（スクロールバーが画面右端に出る） */
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+
+    /* 送信フォームも同じ幅・位置を維持 */
+    #form_sheld {
+        max-width: var(--cw-content-width) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
 }
 
-/* メッセージ本体は元の幅（例: 900px）で中央寄せのまま維持 */
-#chat .mes {
-    max-width: var(--chat-content-width, 900px);
-    margin-left: auto !important;
-    margin-right: auto !important;
-    box-sizing: border-box;
-    padding-left: 16px;
-    padding-right: 16px;
-}
-
-/* 送信フォームも中央寄せを維持 */
-#form_sheld {
-    max-width: var(--chat-content-width, 900px);
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
+/* チャット非表示（透過）機能は既存のまま維持 */
