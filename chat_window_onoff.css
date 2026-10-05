@@ -76,9 +76,7 @@ body.chat-window-is-hidden #sheldheader {
     #chat::-webkit-scrollbar-thumb:hover { background: rgba(220, 220, 220, 0.8) !important; }
     #chat { scrollbar-width: auto !important; scrollbar-color: rgba(200, 200, 200, 0.5) rgba(0, 0, 0, 0.2) !important; }
 
-    #form_sheld { max-width: var(--cw-content-width, 900px) !important; margin-left: auto !important; margin-right: auto !important; }
-
-    /* ボタン群 */
+        /* ボタン群 */
     #image-control-container,
     #toggle-chat-button,
     #window-control-buttons,
