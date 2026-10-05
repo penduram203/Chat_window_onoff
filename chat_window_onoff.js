@@ -167,9 +167,11 @@ function applyChatLayout() {
         form.style.right = '0';
         form.style.top = 'auto';
         form.style.bottom = chatBottom + 'px';
-        form.style.width = 'auto';
-        form.style.maxWidth = 'none';
+        form.style.width = '100vw';
+        form.style.maxWidth = '100vw';
         form.style.margin = '0';
+        form.style.marginLeft = '0';
+        form.style.marginRight = '0';
         form.style.paddingLeft = `calc((100vw - ${contentWidth}px) / 2)`;
         form.style.paddingRight = `calc((100vw - ${contentWidth}px) / 2)`;
         form.style.boxSizing = 'border-box';
