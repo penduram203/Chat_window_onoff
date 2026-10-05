@@ -154,7 +154,7 @@ function applyChatLayout() {
 }
 
 // 定期的にレイアウトを更新（ウィンドウ操作ボタンで #sheld が動いても追従）
-setInterval(applyChatLayout, 300);
+setInterval(applyChatLayout, 1000);
 window.addEventListener('resize', applyChatLayout);
 
 // 初期化後に一度実行
