@@ -32,6 +32,20 @@
     opacity: 0.1;
 }
 
+/* 透過効果のトランジション */
+#chat, #form_sheld, #sheldheader {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* bodyにこのクラスが付くと、対象要素が透過される */
+body.chat-window-is-hidden #chat,
+body.chat-window-is-hidden #form_sheld,
+body.chat-window-is-hidden #sheldheader {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
 /* ============================================================ */
 /* 1. 全てのメッセージのアバターを常に非表示                       */
 /* ============================================================ */
