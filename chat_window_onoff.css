@@ -67,35 +67,11 @@ body.chat-window-is-hidden #sheldheader {
 }
 
 @media (min-width: 1001px) {
-    /* ★ #sheld は変更しない（元の幅・位置を維持） */
-    /* ただし、#chat がはみ出せるように overflow を visible に */
     #sheld {
         overflow: visible !important;
     }
 
-    /* ★ #chat を画面全幅に拡張（負のマージンで #sheld の外へ） */
-    #chat {
-        width: 100vw !important;
-        max-width: 100vw !important;
-        /* 親の中心を基準に、画面端まで押し広げる */
-        margin-left: calc(50% - 50vw) !important;
-        margin-right: calc(50% - 50vw) !important;
-        /* コンテンツを元の幅・位置に保つ左右パディング */
-        padding-left: calc((100vw - var(--cw-content-width)) / 2) !important;
-        padding-right: calc((100vw - var(--cw-content-width)) / 2) !important;
-        box-sizing: border-box !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-    }
-
-    /* 送信フォームも中央寄せ維持 */
-    #form_sheld {
-        max-width: var(--cw-content-width) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-
-    /* スクロールバー強制表示 */
+    /* #chat の位置はJSで制御する。ここではスクロールバーの見た目のみ指定 */
     #chat::-webkit-scrollbar {
         display: block !important;
         width: 36px !important;
@@ -110,8 +86,18 @@ body.chat-window-is-hidden #sheldheader {
     #chat::-webkit-scrollbar-thumb:hover {
         background: rgba(220, 220, 220, 0.8) !important;
     }
+    #chat {
+        scrollbar-width: auto !important;
+        scrollbar-color: rgba(200, 200, 200, 0.5) rgba(0, 0, 0, 0.2) !important;
+    }
 
-    /* ボタン群は最前面 */
+    #form_sheld {
+        max-width: var(--cw-content-width, 900px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* ボタン群 */
     #image-control-container,
     #toggle-chat-button,
     #window-control-buttons,
@@ -121,14 +107,12 @@ body.chat-window-is-hidden #sheldheader {
         z-index: 15000 !important;
         pointer-events: auto !important;
     }
-    
     #image-control-container > button,
     #toggle-chat-button {
         z-index: 15000 !important;
         pointer-events: auto !important;
     }
 
-    /* Text_stylingパネルをボタン群より前面に配置 */
     #text-styling-panel {
         z-index: 16000 !important;
     }
