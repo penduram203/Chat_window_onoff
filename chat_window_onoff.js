@@ -114,11 +114,19 @@ if (document.readyState === 'loading') {
  * - 上下は #sheld のヘッダ下 / フォーム上に合わせる
  * - ウィンドウリサイズやDOM変化に追従するため、定期的に再計算
  */
-function applyChatLayout() {
+
+function applyChatLayout() 
+{
     const chat = document.getElementById('chat');
     const sheld = document.getElementById('sheld');
     if (!chat || !sheld) return;
 
+    // ===== デバッグログ =====
+    const sr = sheld.getBoundingClientRect();
+    console.log('[Layout] sheldRect.top=', sr.top, 'sheldRect.bottom=', sr.bottom,
+                'winH=', window.innerHeight, 'winW=', window.innerWidth);
+    // ========================
+    
     // モバイル幅では元のレイアウトに戻す
     if (window.innerWidth < 1001) {
         chat.style.cssText = '';
