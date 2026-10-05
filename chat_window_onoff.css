@@ -94,13 +94,23 @@ body.chat-window-is-hidden #sheldheader {
 
     #text-styling-panel { z-index: 16000 !important; }
 
-        /* Image Display Extensionのウィンドウをチャットより前面に配置（ドラッグ可能にする） */
-    #image-display-container {
-        z-index: 100 !important;
+    /* #chat の空白領域（左右のパディング）をクリック透過させる */
+    #chat {
+        pointer-events: none !important;
+    }
+    #chat .mes {
+        pointer-events: auto !important;
+    }
+    #chat::-webkit-scrollbar,
+    #chat::-webkit-scrollbar-thumb,
+    #chat::-webkit-scrollbar-track {
+        pointer-events: auto !important;
     }
 
-    /* カスタム設定ウィンドウも前面に */
-    #custom-window {
-        z-index: 101 !important;
+    /* #sheld のヘッダと入力欄は通常通りクリック可能 */
+    #sheldheader,
+    #form_sheld,
+    #form_sheld * {
+        pointer-events: auto !important;
     }
 }
