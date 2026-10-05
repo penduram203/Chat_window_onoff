@@ -107,3 +107,63 @@ if (document.readyState === 'loading') {
 } else {
     initChatWindowToggle();
 }
+
+/**
+ * #chatを画面に固定する（position: fixed）
+ * - 左右は画面いっぱいに広げ、内側パディングでコンテンツを中央寄せ
+ * - 上下は #sheld のヘッダ下 / フォーム上に合わせる
+ * - ウィンドウリサイズやDOM変化に追従するため、定期的に再計算
+ */
+function applyChatLayout() {
+    const chat = document.getElementById('chat');
+    const sheld = document.getElementById('sheld');
+    if (!chat || !sheld) return;
+
+    // モバイル幅では元のレイアウトに戻す
+    if (window.innerWidth < 1001) {
+        chat.style.cssText = '';
+        return;
+    }
+
+    const sheldRect = sheld.getBoundingClientRect();
+    const header = document.getElementById('sheldheader');
+    const headerRect = header ? header.getBoundingClientRect() : null;
+    const form = document.getElementById('form_sheld');
+    const formRect = form ? form.getBoundingClientRect() : null;
+
+    // 上端: ヘッダの下端（ヘッダがなければ #sheld の上端 + 35px）
+    let top = sheldRect.top + 35;
+    if (headerRect && headerRect.bottom > sheldRect.top && headerRect.bottom < sheldRect.bottom) {
+        top = headerRect.bottom;
+    }
+
+    // 下端: フォームの上端（フォームが #sheld 内にある場合）
+    let bottom = window.innerHeight - sheldRect.bottom + 40;
+    if (formRect && formRect.top > sheldRect.top && formRect.top < sheldRect.bottom) {
+        bottom = window.innerHeight - formRect.top;
+    }
+
+    const contentWidth = 900;  // --cw-content-width と同じ値
+
+    chat.style.position = 'fixed';
+    chat.style.left = '0';
+    chat.style.right = '0';
+    chat.style.top = top + 'px';
+    chat.style.bottom = bottom + 'px';
+    chat.style.width = 'auto';
+    chat.style.maxWidth = 'none';
+    chat.style.margin = '0';
+    chat.style.paddingLeft = `calc((100vw - ${contentWidth}px) / 2)`;
+    chat.style.paddingRight = `calc((100vw - ${contentWidth}px) / 2)`;
+    chat.style.boxSizing = 'border-box';
+    chat.style.overflowY = 'auto';
+    chat.style.overflowX = 'hidden';
+    chat.style.zIndex = '1';
+}
+
+// 定期的にレイアウトを更新（ウィンドウ操作ボタンで #sheld が動いても追従）
+setInterval(applyChatLayout, 300);
+window.addEventListener('resize', applyChatLayout);
+
+// 初期化後に一度実行
+setTimeout(applyChatLayout, 100);
