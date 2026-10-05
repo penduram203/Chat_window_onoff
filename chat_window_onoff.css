@@ -64,18 +64,6 @@
         overflow-x: hidden !important;
     }
 
-    /* #chat も画面幅いっぱいに広げ、左右パディングでコンテンツを中央寄せ */
-    #chat {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding-left: calc((100vw - var(--cw-content-width)) / 2) !important;
-        padding-right: calc((100vw - var(--cw-content-width)) / 2) !important;
-        box-sizing: border-box !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-    }
-
     /* ★ 追加: 画面左下のボタン群の領域を #sheld のクリック対象から除外する */
     #sheld {
         /* クリック透過を許可（ボタンは前面で受ける） */
@@ -94,28 +82,5 @@
     #toggle-chat-button {
         z-index: 2147483647 !important;
         pointer-events: auto !important;
-    }
-    
-    /* 送信フォームも中央寄せ維持 */
-    #form_sheld {
-        max-width: var(--cw-content-width) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-
-    /* スクロールバーを強制表示（テーマによる非表示化を防ぐ） */
-    #chat::-webkit-scrollbar {
-        display: block !important;
-        width: 36px !important;
-    }
-    #chat::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2) !important;
-    }
-    #chat::-webkit-scrollbar-thumb {
-        background: rgba(200, 200, 200, 0.5) !important;
-        border-radius: 6px !important;
-    }
-    #chat::-webkit-scrollbar-thumb:hover {
-        background: rgba(220, 220, 220, 0.8) !important;
     }
 }
