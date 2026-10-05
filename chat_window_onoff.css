@@ -93,23 +93,6 @@ body.chat-window-is-hidden #sheldheader {
     #toggle-chat-button { z-index: 15000 !important; pointer-events: auto !important; }
 
     #text-styling-panel { z-index: 16000 !important; }
-
-    /* #chat の空白領域（左右のパディング）をクリック透過させる */
-    #chat {
-        pointer-events: none !important;
-    }
-
-    /* #chat の子孫要素はすべてクリック可能にする */
-    #chat * {
-        pointer-events: auto !important;
-    }
-
-    /* スクロールバーもクリック可能 */
-    #chat::-webkit-scrollbar,
-    #chat::-webkit-scrollbar-thumb,
-    #chat::-webkit-scrollbar-track {
-        pointer-events: auto !important;
-    }
     
     /* #sheld のヘッダと入力欄は通常通りクリック可能 */
     #sheldheader,
