@@ -194,3 +194,62 @@ setInterval(applyChatLayout, 500);
 window.addEventListener('resize', applyChatLayout);
 
 setTimeout(applyChatLayout, 100);
+
+/**
+ * #chatのパディング領域（左右の余白）のクリックを背後要素に転送する
+ * - #chat自体は pointer-events: auto のまま（スクロールバーが機能するように）
+ * - クリック位置がパディング領域の場合のみ、背後の要素へイベントを転送
+ */
+function setupChatPaddingClickThrough() {
+    const chat = document.getElementById('chat');
+    if (!chat) {
+        console.log('[Chat Window On/Off] #chat が見つかりません');
+        return;
+    }
+
+    // 既にインストール済みなら何もしない
+    if (chat.dataset.paddingClickThroughInstalled === 'true') return;
+    chat.dataset.paddingClickThroughInstalled = 'true';
+
+    chat.addEventListener('mousedown', (e) => {
+        // 子要素がターゲットの場合は通常処理（メッセージ・ボタンなど）
+        if (e.target !== chat) return;
+
+        // スクロールバー領域かどうかを判定
+        const rect = chat.getBoundingClientRect();
+        const scrollbarWidth = chat.offsetWidth - chat.clientWidth;
+        const isOnScrollbar = scrollbarWidth > 0 && e.clientX >= rect.right - scrollbarWidth;
+
+        if (isOnScrollbar) {
+            // スクロールバー操作は通常通り通す
+            return;
+        }
+
+        // パディング領域のクリック → 背後要素へ転送
+        e.preventDefault();
+        e.stopPropagation();
+
+        // 一時的に pointer-events を無効化して背後要素を取得
+        chat.style.pointerEvents = 'none';
+        const below = document.elementFromPoint(e.clientX, e.clientY);
+        chat.style.pointerEvents = '';
+
+        if (below && below !== chat && !chat.contains(below)) {
+            const forwarded = new MouseEvent('mousedown', {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+                clientX: e.clientX,
+                clientY: e.clientY,
+                button: e.button,
+                buttons: e.buttons,
+            });
+            below.dispatchEvent(forwarded);
+        }
+    }, true);
+
+    console.log('[Chat Window On/Off] パディング領域のクリック透過を設定しました');
+}
+
+// initChatWindowToggle の中で呼び出す、または独立して実行
+setupChatPaddingClickThrough();
