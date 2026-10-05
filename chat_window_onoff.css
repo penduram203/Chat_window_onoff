@@ -53,22 +53,20 @@
 }
 
 @media (min-width: 1001px) {
-    /* #sheld を画面幅いっぱいに広げて、#chat の右端が切れないようにする */
+    /* ★ #sheld は変更しない（元の幅・位置を維持） */
+    /* ただし、#chat がはみ出せるように overflow を visible に */
     #sheld {
-        width: 100vw !important;
-        max-width: 100vw !important;
-        margin-left: calc(50% - 50vw) !important;
-        margin-right: calc(50% - 50vw) !important;
-        padding: 0 !important;
-        box-sizing: border-box !important;
-        overflow-x: hidden !important;
+        overflow: visible !important;
     }
 
-    /* #chat も画面幅いっぱいに広げ、左右パディングでコンテンツを中央寄せ */
+    /* ★ #chat を画面全幅に拡張（負のマージンで #sheld の外へ） */
     #chat {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        /* 親の中心を基準に、画面端まで押し広げる */
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+        /* コンテンツを元の幅・位置に保つ左右パディング */
         padding-left: calc((100vw - var(--cw-content-width)) / 2) !important;
         padding-right: calc((100vw - var(--cw-content-width)) / 2) !important;
         box-sizing: border-box !important;
@@ -76,29 +74,6 @@
         overflow-x: hidden !important;
     }
 
-    /* ★ 追加: 画面左下のボタン群の領域を #sheld のクリック対象から除外する */
-    #sheld {
-        /* クリック透過を許可（ボタンは前面で受ける） */
-        pointer-events: auto;
-    }    
-
-    /* ボタン群は必ず最前面でクリックを受け取る */
-    #image-control-container,
-    #toggle-chat-button,
-    #window-control-buttons,
-    #window-control-buttons > button,
-    #window-control-buttons *,
-    #restore-panel-button {
-        z-index: 2147483647 !important;
-        pointer-events: auto !important;
-    }
-
-    #image-control-container > button,
-    #toggle-chat-button {
-        z-index: 2147483647 !important;
-        pointer-events: auto !important;
-    }
-    
     /* 送信フォームも中央寄せ維持 */
     #form_sheld {
         max-width: var(--cw-content-width) !important;
@@ -106,7 +81,7 @@
         margin-right: auto !important;
     }
 
-    /* スクロールバーを強制表示（テーマによる非表示化を防ぐ） */
+    /* スクロールバー強制表示 */
     #chat::-webkit-scrollbar {
         display: block !important;
         width: 36px !important;
@@ -120,5 +95,16 @@
     }
     #chat::-webkit-scrollbar-thumb:hover {
         background: rgba(220, 220, 220, 0.8) !important;
+    }
+
+    /* ボタン群は最前面 */
+    #image-control-container,
+    #toggle-chat-button,
+    #window-control-buttons,
+    #window-control-buttons > button,
+    #window-control-buttons *,
+    #restore-panel-button {
+        z-index: 2147483647 !important;
+        pointer-events: auto !important;
     }
 }
