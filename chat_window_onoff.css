@@ -15,7 +15,7 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    z-index: 1500000;
+    z-index: 2147483647;
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     opacity: 0.1;
     transition: opacity 0.0s, background-color 0.0s;
@@ -76,6 +76,26 @@
         overflow-x: hidden !important;
     }
 
+    /* ★ 追加: 画面左下のボタン群の領域を #sheld のクリック対象から除外する */
+    #sheld {
+        /* クリック透過を許可（ボタンは前面で受ける） */
+        pointer-events: auto;
+    }    
+
+    /* ボタン群は必ず最前面でクリックを受け取る */
+    #image-control-container,
+    #toggle-chat-button {
+        z-index: 2147483647 !important;
+        pointer-events: auto !important;
+    }
+
+    /* 念のため、ボタン要素自身にも */
+    #image-control-container > button,
+    #toggle-chat-button {
+        z-index: 2147483647 !important;
+        pointer-events: auto !important;
+    }
+    
     /* 送信フォームも中央寄せ維持 */
     #form_sheld {
         max-width: var(--cw-content-width) !important;
