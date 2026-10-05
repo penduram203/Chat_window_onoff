@@ -190,7 +190,7 @@ function applyChatLayout() {
 }
 
 // 定期的にレイアウトを更新
-setInterval(applyChatLayout, 250);
+setInterval(applyChatLayout, 300);
 window.addEventListener('resize', applyChatLayout);
 
 setTimeout(applyChatLayout, 100);
