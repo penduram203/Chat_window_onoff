@@ -114,19 +114,16 @@ if (document.readyState === 'loading') {
  * - 上下は #sheld のヘッダ下 / フォーム上に合わせる
  * - ウィンドウリサイズやDOM変化に追従するため、定期的に再計算
  */
-
-function applyChatLayout() 
-{
+/**
+ * #chatを画面に固定する（position: fixed）
+ * - 左右は画面いっぱいに広げ、内側パディングでコンテンツを中央寄せ
+ * - 上下は #sheld の領域に合わせる（formRectの複雑な判定は行わない）
+ */
+function applyChatLayout() {
     const chat = document.getElementById('chat');
     const sheld = document.getElementById('sheld');
     if (!chat || !sheld) return;
 
-    // ===== デバッグログ =====
-    const sr = sheld.getBoundingClientRect();
-    console.log('[Layout] sheldRect.top=', sr.top, 'sheldRect.bottom=', sr.bottom,
-                'winH=', window.innerHeight, 'winW=', window.innerWidth);
-    // ========================
-    
     // モバイル幅では元のレイアウトに戻す
     if (window.innerWidth < 1001) {
         chat.style.cssText = '';
@@ -134,24 +131,11 @@ function applyChatLayout()
     }
 
     const sheldRect = sheld.getBoundingClientRect();
-    const header = document.getElementById('sheldheader');
-    const headerRect = header ? header.getBoundingClientRect() : null;
-    const form = document.getElementById('form_sheld');
-    const formRect = form ? form.getBoundingClientRect() : null;
+    const contentWidth = 900;
 
-    // 上端: ヘッダの下端（ヘッダがなければ #sheld の上端 + 35px）
-    let top = sheldRect.top + 35;
-    if (headerRect && headerRect.bottom > sheldRect.top && headerRect.bottom < sheldRect.bottom) {
-        top = headerRect.bottom;
-    }
-
-    // 下端: フォームの上端（フォームが #sheld 内にある場合）
-    let bottom = window.innerHeight - sheldRect.bottom + 40;
-    if (formRect && formRect.top > sheldRect.top && formRect.top < sheldRect.bottom) {
-        bottom = window.innerHeight - formRect.top;
-    }
-
-    const contentWidth = 900;  // --cw-content-width と同じ値
+    // #sheld の領域をそのまま使う（シンプルで確実）
+    const top = sheldRect.top;
+    const bottom = window.innerHeight - sheldRect.bottom;
 
     chat.style.position = 'fixed';
     chat.style.left = '0';
