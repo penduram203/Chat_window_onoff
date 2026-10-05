@@ -84,12 +84,15 @@
 
     /* ボタン群は必ず最前面でクリックを受け取る */
     #image-control-container,
-    #toggle-chat-button {
+    #toggle-chat-button,
+    #window-control-buttons,
+    #window-control-buttons > button,
+    #window-control-buttons *,
+    #restore-panel-button {
         z-index: 2147483647 !important;
         pointer-events: auto !important;
     }
 
-    /* 念のため、ボタン要素自身にも */
     #image-control-container > button,
     #toggle-chat-button {
         z-index: 2147483647 !important;
