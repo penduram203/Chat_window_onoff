@@ -67,35 +67,16 @@ body.chat-window-is-hidden #sheldheader {
 }
 
 @media (min-width: 1001px) {
-    #sheld {
-        overflow: visible !important;
-    }
+    #sheld { overflow: visible !important; }
 
-    /* #chat の位置はJSで制御する。ここではスクロールバーの見た目のみ指定 */
-    #chat::-webkit-scrollbar {
-        display: block !important;
-        width: 36px !important;
-    }
-    #chat::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2) !important;
-    }
-    #chat::-webkit-scrollbar-thumb {
-        background: rgba(200, 200, 200, 0.5) !important;
-        border-radius: 6px !important;
-    }
-    #chat::-webkit-scrollbar-thumb:hover {
-        background: rgba(220, 220, 220, 0.8) !important;
-    }
-    #chat {
-        scrollbar-width: auto !important;
-        scrollbar-color: rgba(200, 200, 200, 0.5) rgba(0, 0, 0, 0.2) !important;
-    }
+    /* スクロールバーの見た目のみ */
+    #chat::-webkit-scrollbar { display: block !important; width: 36px !important; }
+    #chat::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2) !important; }
+    #chat::-webkit-scrollbar-thumb { background: rgba(200, 200, 200, 0.5) !important; border-radius: 6px !important; }
+    #chat::-webkit-scrollbar-thumb:hover { background: rgba(220, 220, 220, 0.8) !important; }
+    #chat { scrollbar-width: auto !important; scrollbar-color: rgba(200, 200, 200, 0.5) rgba(0, 0, 0, 0.2) !important; }
 
-    #form_sheld {
-        max-width: var(--cw-content-width, 900px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
+    #form_sheld { max-width: var(--cw-content-width, 900px) !important; margin-left: auto !important; margin-right: auto !important; }
 
     /* ボタン群 */
     #image-control-container,
@@ -103,17 +84,9 @@ body.chat-window-is-hidden #sheldheader {
     #window-control-buttons,
     #window-control-buttons > button,
     #window-control-buttons *,
-    #restore-panel-button {
-        z-index: 15000 !important;
-        pointer-events: auto !important;
-    }
+    #restore-panel-button { z-index: 15000 !important; pointer-events: auto !important; }
     #image-control-container > button,
-    #toggle-chat-button {
-        z-index: 15000 !important;
-        pointer-events: auto !important;
-    }
+    #toggle-chat-button { z-index: 15000 !important; pointer-events: auto !important; }
 
-    #text-styling-panel {
-        z-index: 16000 !important;
-    }
+    #text-styling-panel { z-index: 16000 !important; }
 }
