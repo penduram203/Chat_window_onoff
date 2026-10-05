@@ -32,6 +32,20 @@
     opacity: 0.1;
 }
 
+/* 透過効果のトランジション */
+#chat, #form_sheld, #sheldheader {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* bodyにこのクラスが付くと、対象要素が透過される */
+body.chat-window-is-hidden #chat,
+body.chat-window-is-hidden #form_sheld,
+body.chat-window-is-hidden #sheldheader {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
 /* ============================================================ */
 /* 1. 全てのメッセージのアバターを常に非表示                       */
 /* ============================================================ */
@@ -53,69 +67,24 @@
 }
 
 @media (min-width: 1001px) {
-    /* #sheld を画面幅いっぱいに広げて、#chat の右端が切れないようにする */
-    #sheld {
-        width: 100vw !important;
-        max-width: 100vw !important;
-        margin-left: calc(50% - 50vw) !important;
-        margin-right: calc(50% - 50vw) !important;
-        padding: 0 !important;
-        box-sizing: border-box !important;
-        overflow-x: hidden !important;
-    }
+    #sheld { overflow: visible !important; }
 
-    /* #chat も画面幅いっぱいに広げ、左右パディングでコンテンツを中央寄せ */
-    #chat {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding-left: calc((100vw - var(--cw-content-width)) / 2) !important;
-        padding-right: calc((100vw - var(--cw-content-width)) / 2) !important;
-        box-sizing: border-box !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-    }
+    /* スクロールバーの見た目のみ */
+    #chat::-webkit-scrollbar { display: block !important; width: 36px !important; }
+    #chat::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2) !important; }
+    #chat::-webkit-scrollbar-thumb { background: rgba(200, 200, 200, 0.5) !important; border-radius: 6px !important; }
+    #chat::-webkit-scrollbar-thumb:hover { background: rgba(220, 220, 220, 0.8) !important; }
+    #chat { scrollbar-width: auto !important; scrollbar-color: rgba(200, 200, 200, 0.5) rgba(0, 0, 0, 0.2) !important; }
 
-    /* ★ 追加: 画面左下のボタン群の領域を #sheld のクリック対象から除外する */
-    #sheld {
-        /* クリック透過を許可（ボタンは前面で受ける） */
-        pointer-events: auto;
-    }    
-
-    /* ボタン群は必ず最前面でクリックを受け取る */
+        /* ボタン群 */
     #image-control-container,
-    #toggle-chat-button {
-        z-index: 2147483647 !important;
-        pointer-events: auto !important;
-    }
-
-    /* 念のため、ボタン要素自身にも */
+    #toggle-chat-button,
+    #window-control-buttons,
+    #window-control-buttons > button,
+    #window-control-buttons *,
+    #restore-panel-button { z-index: 15000 !important; pointer-events: auto !important; }
     #image-control-container > button,
-    #toggle-chat-button {
-        z-index: 2147483647 !important;
-        pointer-events: auto !important;
-    }
-    
-    /* 送信フォームも中央寄せ維持 */
-    #form_sheld {
-        max-width: var(--cw-content-width) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
+    #toggle-chat-button { z-index: 15000 !important; pointer-events: auto !important; }
 
-    /* スクロールバーを強制表示（テーマによる非表示化を防ぐ） */
-    #chat::-webkit-scrollbar {
-        display: block !important;
-        width: 36px !important;
-    }
-    #chat::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2) !important;
-    }
-    #chat::-webkit-scrollbar-thumb {
-        background: rgba(200, 200, 200, 0.5) !important;
-        border-radius: 6px !important;
-    }
-    #chat::-webkit-scrollbar-thumb:hover {
-        background: rgba(220, 220, 220, 0.8) !important;
-    }
+    #text-styling-panel { z-index: 16000 !important; }
 }
