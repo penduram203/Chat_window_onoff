@@ -93,4 +93,14 @@ body.chat-window-is-hidden #sheldheader {
     #toggle-chat-button { z-index: 15000 !important; pointer-events: auto !important; }
 
     #text-styling-panel { z-index: 16000 !important; }
+
+        /* Image Display Extensionのウィンドウをチャットより前面に配置（ドラッグ可能にする） */
+    #image-display-container {
+        z-index: 100 !important;
+    }
+
+    /* カスタム設定ウィンドウも前面に */
+    #custom-window {
+        z-index: 101 !important;
+    }
 }
