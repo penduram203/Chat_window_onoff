@@ -76,6 +76,12 @@ body.chat-window-is-hidden #sheldheader {
     #chat::-webkit-scrollbar-thumb:hover { background: rgba(220, 220, 220, 0.8) !important; }
     #chat { scrollbar-width: auto !important; scrollbar-color: rgba(200, 200, 200, 0.5) rgba(0, 0, 0, 0.2) !important; }
 
+    /* 背景色をコンテンツ領域（パディングを除く）に限定する */
+    #chat {
+        background-clip: content-box !important;
+        -webkit-background-clip: content-box !important;
+    }
+    
         /* ボタン群 */
     #image-control-container,
     #toggle-chat-button,
