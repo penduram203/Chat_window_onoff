@@ -133,13 +133,17 @@ function applyChatLayout() {
     }
 
     const sheldRect = sheld.getBoundingClientRect();
+    const winW = window.innerWidth;
     const contentWidth = 900;
 
-    // #sheld の領域を基準に上下端を計算
+    // #sheld の中心X座標を基準に、#chat の左右パディングを計算
+    const sheldCenterX = sheldRect.left + sheldRect.width / 2;
+    const paddingLeft = Math.max(0, sheldCenterX - contentWidth / 2);
+    const paddingRight = Math.max(0, winW - sheldCenterX - contentWidth / 2);
+
     const chatTop = sheldRect.top;
     const chatBottom = window.innerHeight - sheldRect.bottom;
 
-    // フォームの高さを取得（チャット領域から差し引く）
     const formRect = form ? form.getBoundingClientRect() : null;
     const formHeight = formRect ? formRect.height : 40;
 
@@ -148,19 +152,22 @@ function applyChatLayout() {
     chat.style.left = '0';
     chat.style.right = '0';
     chat.style.top = chatTop + 'px';
-    // フォーム分を空けて、下端がフォームに被らないようにする
     chat.style.bottom = (chatBottom + formHeight) + 'px';
-    chat.style.width = 'auto';
-    chat.style.maxWidth = 'none';
+    chat.style.width = '100vw';
+    chat.style.maxWidth = '100vw';
     chat.style.margin = '0';
-    chat.style.paddingLeft = `calc((100vw - ${contentWidth}px) / 2)`;
-    chat.style.paddingRight = `calc((100vw - ${contentWidth}px) / 2)`;
+    chat.style.marginLeft = '0';
+    chat.style.marginRight = '0';
+    chat.style.paddingLeft = paddingLeft + 'px';
+    chat.style.paddingRight = paddingRight + 'px';
     chat.style.boxSizing = 'border-box';
     chat.style.overflowY = 'auto';
     chat.style.overflowX = 'hidden';
     chat.style.zIndex = '1';
+    // パディング変更時にスクロール位置を維持
+    const prevScroll = chat.scrollTop;
 
-    // ---- #form_sheld も固定（#sheld の下端に配置） ----
+    // ---- #form_sheld を固定 ----
     if (form) {
         form.style.position = 'fixed';
         form.style.left = '0';
@@ -172,23 +179,18 @@ function applyChatLayout() {
         form.style.margin = '0';
         form.style.marginLeft = '0';
         form.style.marginRight = '0';
-        form.style.paddingLeft = `calc((100vw - ${contentWidth}px) / 2)`;
-        form.style.paddingRight = `calc((100vw - ${contentWidth}px) / 2)`;
+        form.style.paddingLeft = paddingLeft + 'px';
+        form.style.paddingRight = paddingRight + 'px';
         form.style.boxSizing = 'border-box';
         form.style.zIndex = '2';
     }
+
+    // スクロール位置を復元
+    chat.scrollTop = prevScroll;
 }
 
-// 定期的にレイアウトを更新（#sheld が動いても追従）
-setInterval(applyChatLayout, 1000);
+// 定期的にレイアウトを更新
+setInterval(applyChatLayout, 500);
 window.addEventListener('resize', applyChatLayout);
 
-// 初期化後に一度実行
-setTimeout(applyChatLayout, 100);
-
-// 定期的にレイアウトを更新（ウィンドウ操作ボタンで #sheld が動いても追従）
-setInterval(applyChatLayout, 1000);
-window.addEventListener('resize', applyChatLayout);
-
-// 初期化後に一度実行
 setTimeout(applyChatLayout, 100);
