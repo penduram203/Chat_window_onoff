@@ -132,13 +132,13 @@ function applyChatLayout() {
     const formRect = form ? form.getBoundingClientRect() : null;
 
     // 上端: ヘッダの下端（ヘッダがなければ #sheld の上端 + 35px）
-    let top = sheldRect.top + 35;
+    let top = sheldRect.top + 135;
     if (headerRect && headerRect.bottom > sheldRect.top && headerRect.bottom < sheldRect.bottom) {
         top = headerRect.bottom;
     }
 
     // 下端: フォームの上端（フォームが #sheld 内にある場合）
-    let bottom = window.innerHeight - sheldRect.bottom + 40;
+    let bottom = window.innerHeight - sheldRect.bottom + 140;
     if (formRect && formRect.top > sheldRect.top && formRect.top < sheldRect.bottom) {
         bottom = window.innerHeight - formRect.top;
     }
