@@ -104,7 +104,18 @@
     #window-control-buttons > button,
     #window-control-buttons *,
     #restore-panel-button {
-        z-index: 2147483647 !important;
+        z-index: 15000 !important;
         pointer-events: auto !important;
+    }
+    
+    #image-control-container > button,
+    #toggle-chat-button {
+        z-index: 15000 !important;
+        pointer-events: auto !important;
+    }
+
+    /* Text_stylingパネルをボタン群より前面に配置 */
+    #text-styling-panel {
+        z-index: 16000 !important;
     }
 }
