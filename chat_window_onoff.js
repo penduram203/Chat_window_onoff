@@ -5,6 +5,15 @@ const MODULE_NAME = 'chat_window_onoff';
 const OLD_STORAGE_KEY = 'chatWindowHiddenState';
 
 /**
+ * 公式ギャラリー表示中に非表示にするボタンのID一覧。
+ * Text_styling 関連のボタンが他にもあれば、ここに追記する。
+ */
+const GALLERY_HIDDEN_BUTTON_IDS = [
+    'toggle-chat-button',      // 💡 Chat_window_onoff
+    'restore-panel-button',    // ⚙ Text_styling を開くボタン（推定）
+];
+
+/**
  * 設定を取得・初期化（旧localStorageからの自動マイグレーションを含む）
  */
 function getSettings() {
@@ -111,9 +120,7 @@ if (document.readyState === 'loading') {
 /**
  * #chatを画面に固定する（position: fixed）
  * - 左右は画面いっぱいに広げ、内側パディングでコンテンツを中央寄せ
- * - 上下は #sheld のヘッダ下 / フォーム上に合わせる
- * - 入力欄の高さ変動にも追従するため、formRect.top を基準に下端を算出
- * - ウィンドウリサイズやDOM変化に追従するため、定期的に再計算
+ * - 上下は #sheld の領域に合わせる（formRectの複雑な判定は行わない）
  */
 function applyChatLayout() {
     const chat = document.getElementById('chat');
@@ -140,22 +147,15 @@ function applyChatLayout() {
     const chatTop = sheldRect.top;
     const chatBottom = window.innerHeight - sheldRect.bottom;
 
-    // ★ formRect.top を直接使うことで、入力欄の高さ変動（複数行入力など）にも追従。
-    //   form が取得できない場合は従来ロジック（chatBottom + formHeight）にフォールバック。
     const formRect = form ? form.getBoundingClientRect() : null;
-    const chatBottomOffset = formRect
-        ? Math.max(0, window.innerHeight - formRect.top)
-        : (chatBottom + (form ? form.offsetHeight : 40));
-
-    // パディング変更時にスクロール位置を維持
-    const prevScroll = chat.scrollTop;
+    const formHeight = formRect ? formRect.height : 40;
 
     // ---- #chat を固定 ----
     chat.style.position = 'fixed';
     chat.style.left = '0';
     chat.style.right = '0';
     chat.style.top = chatTop + 'px';
-    chat.style.bottom = chatBottomOffset + 'px';   // ← formRect.top 基準
+    chat.style.bottom = (chatBottom + formHeight) + 'px';
     chat.style.width = '100vw';
     chat.style.maxWidth = '100vw';
     chat.style.margin = '0';
@@ -167,6 +167,8 @@ function applyChatLayout() {
     chat.style.overflowY = 'auto';
     chat.style.overflowX = 'hidden';
     chat.style.zIndex = '1';
+    // パディング変更時にスクロール位置を維持
+    const prevScroll = chat.scrollTop;
 
     // ---- #form_sheld を固定 ----
     if (form) {
@@ -254,3 +256,93 @@ function setupChatPaddingClickThrough() {
 
 // initChatWindowToggle の中で呼び出す、または独立して実行
 setupChatPaddingClickThrough();
+
+// ===================================================================
+// ===== ギャラリー連動：公式ギャラリー表示中は対象ボタンを非表示 =====
+// ===================================================================
+
+/**
+ * SillyTavern公式ギャラリーが表示中かどうかを判定
+ * （image-display.js と同等のロジック）
+ */
+function isGalleryOpen() {
+    const candidates = document.querySelectorAll([
+        '#gallery_container',
+        '.gallery-container',
+        '.gallery_container',
+        '#gallery',
+        '.gallery',
+        '[data-gallery-container]',
+        '.gallery-grid',
+        '#gallery-grid',
+    ].join(','));
+
+    for (const el of candidates) {
+        if (!el) continue;
+        const style = window.getComputedStyle(el);
+        if (style.display === 'none') continue;
+        if (style.visibility === 'hidden') continue;
+        if (parseFloat(style.opacity) === 0) continue;
+        if (el.offsetParent === null && style.position !== 'fixed') continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) continue;
+        return true;
+    }
+    return false;
+}
+
+let lastGalleryStateForButtons = null;
+
+/**
+ * ギャラリーの開閉状態に応じて対象ボタンの表示/非表示を切り替える
+ * - 変化があった時のみDOM操作する
+ * - display:none !important をインラインで付与し、解除時は removeProperty で元に戻す
+ */
+function syncButtonsVisibilityForGallery() {
+    const galleryOpen = isGalleryOpen();
+    if (galleryOpen === lastGalleryStateForButtons) return;
+    lastGalleryStateForButtons = galleryOpen;
+
+    for (const id of GALLERY_HIDDEN_BUTTON_IDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (galleryOpen) {
+            el.style.setProperty('display', 'none', 'important');
+        } else {
+            el.style.removeProperty('display');
+        }
+    }
+
+    if (galleryOpen) {
+        console.log('[Chat Window On/Off] 📷 ギャラリー表示中 → 対象ボタンを非表示');
+    } else {
+        console.log('[Chat Window On/Off] 📷 ギャラリー非表示 → 対象ボタンを再表示');
+    }
+}
+
+/**
+ * ギャラリー開閉の監視
+ * - body全体のDOM変更をMutationObserverで監視
+ * - スタイル変化で検出できないケースの保険として定期的にもチェック
+ */
+function setupGalleryButtonObserver() {
+    const observer = new MutationObserver(() => {
+        syncButtonsVisibilityForGallery();
+    });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class'],
+    });
+
+    // 保険の定期チェック
+    setInterval(syncButtonsVisibilityForGallery, 300);
+
+    // 初回チェック
+    syncButtonsVisibilityForGallery();
+    console.log('[Chat Window On/Off] 📷 ギャラリー連動監視を開始しました');
+}
+
+// ギャラリー連動を開始
+setupGalleryButtonObserver();
