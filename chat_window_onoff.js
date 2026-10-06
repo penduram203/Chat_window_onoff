@@ -7,17 +7,25 @@ const OLD_STORAGE_KEY = 'chatWindowHiddenState';
 /**
  * 公式ギャラリー表示中に非表示にする要素を CSS セレクタで指定する。
  * - ID でもクラスでも属性でも何でも指定可能
+ * - 複数候補を列挙しておけば、実装変更にも追従しやすい
  * - 存在しないセレクタは単に無視される
  */
 const GALLERY_HIDDEN_SELECTORS = [
     // Chat_window_onoff（💡ボタン）
     '#toggle-chat-button',
 
-    // Text_styling 関連（ウィンドウ操作ボタン）
-    '#window-control-buttons',      // 中央 / 右半分ボタンを内包するコンテナ
-    '#center-button',               // 個別指定（保険）
-    '#right-half-button',           // 個別指定（保険）
-    '#restore-panel-button',        // ⚙アイコン（存在すれば）
+    // Text_styling 関連：中央 / 右半分ボタン群（親要素を隠せば子も隠れる）
+    '#window-control-buttons',
+
+    // 旧推定・候補（存在すれば一緒に隠れる）
+    '#restore-panel-button',
+    '#text-styling-button',
+    '#text-styling-toggle',
+    '#toggle-text-styling-button',
+    '#text_styling_button',
+    '.text-styling-button',
+    '.text-styling-toggle',
+    '[data-text-styling-toggle]',
 ];
 
 /**
@@ -265,7 +273,7 @@ function setupChatPaddingClickThrough() {
 setupChatPaddingClickThrough();
 
 // ===================================================================
-// ===== ギャラリー連動：公式ギャラリー表示中は対象ボタンを非表示 =====
+// ===== ギャラリー連動：公式ギャラリー表示中は対象要素を非表示 =====
 // ===================================================================
 
 /**
@@ -301,7 +309,7 @@ function isGalleryOpen() {
 let lastGalleryStateForButtons = null;
 
 /**
- * ギャラリーの開閉状態に応じて対象ボタンの表示/非表示を切り替える
+ * ギャラリーの開閉状態に応じて対象要素の表示/非表示を切り替える
  * - 変化があった時のみDOM操作する
  * - display:none !important をインラインで付与し、解除時は removeProperty で元に戻す
  */
@@ -310,20 +318,21 @@ function syncButtonsVisibilityForGallery() {
     if (galleryOpen === lastGalleryStateForButtons) return;
     lastGalleryStateForButtons = galleryOpen;
 
-    for (const id of GALLERY_HIDDEN_BUTTON_IDS) {
-        const el = document.getElementById(id);
-        if (!el) continue;
+    const selector = GALLERY_HIDDEN_SELECTORS.join(',');
+    const targets = document.querySelectorAll(selector);
+
+    targets.forEach(el => {
         if (galleryOpen) {
             el.style.setProperty('display', 'none', 'important');
         } else {
             el.style.removeProperty('display');
         }
-    }
+    });
 
     if (galleryOpen) {
-        console.log('[Chat Window On/Off] 📷 ギャラリー表示中 → 対象ボタンを非表示');
+        console.log(`[Chat Window On/Off] 📷 ギャラリー表示中 → ${targets.length} 個の対象要素を非表示`);
     } else {
-        console.log('[Chat Window On/Off] 📷 ギャラリー非表示 → 対象ボタンを再表示');
+        console.log(`[Chat Window On/Off] 📷 ギャラリー非表示 → ${targets.length} 個の対象要素を再表示`);
     }
 }
 
