@@ -112,12 +112,8 @@ if (document.readyState === 'loading') {
  * #chatを画面に固定する（position: fixed）
  * - 左右は画面いっぱいに広げ、内側パディングでコンテンツを中央寄せ
  * - 上下は #sheld のヘッダ下 / フォーム上に合わせる
+ * - 入力欄の高さ変動にも追従するため、formRect.top を基準に下端を算出
  * - ウィンドウリサイズやDOM変化に追従するため、定期的に再計算
- */
-/**
- * #chatを画面に固定する（position: fixed）
- * - 左右は画面いっぱいに広げ、内側パディングでコンテンツを中央寄せ
- * - 上下は #sheld の領域に合わせる（formRectの複雑な判定は行わない）
  */
 function applyChatLayout() {
     const chat = document.getElementById('chat');
@@ -144,15 +140,22 @@ function applyChatLayout() {
     const chatTop = sheldRect.top;
     const chatBottom = window.innerHeight - sheldRect.bottom;
 
+    // ★ formRect.top を直接使うことで、入力欄の高さ変動（複数行入力など）にも追従。
+    //   form が取得できない場合は従来ロジック（chatBottom + formHeight）にフォールバック。
     const formRect = form ? form.getBoundingClientRect() : null;
-    const formHeight = formRect ? formRect.height : 40;
+    const chatBottomOffset = formRect
+        ? Math.max(0, window.innerHeight - formRect.top)
+        : (chatBottom + (form ? form.offsetHeight : 40));
+
+    // パディング変更時にスクロール位置を維持
+    const prevScroll = chat.scrollTop;
 
     // ---- #chat を固定 ----
     chat.style.position = 'fixed';
     chat.style.left = '0';
     chat.style.right = '0';
     chat.style.top = chatTop + 'px';
-    chat.style.bottom = (chatBottom + formHeight) + 'px';
+    chat.style.bottom = chatBottomOffset + 'px';   // ← formRect.top 基準
     chat.style.width = '100vw';
     chat.style.maxWidth = '100vw';
     chat.style.margin = '0';
@@ -164,8 +167,6 @@ function applyChatLayout() {
     chat.style.overflowY = 'auto';
     chat.style.overflowX = 'hidden';
     chat.style.zIndex = '1';
-    // パディング変更時にスクロール位置を維持
-    const prevScroll = chat.scrollTop;
 
     // ---- #form_sheld を固定 ----
     if (form) {
