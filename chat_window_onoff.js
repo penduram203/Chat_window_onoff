@@ -5,12 +5,19 @@ const MODULE_NAME = 'chat_window_onoff';
 const OLD_STORAGE_KEY = 'chatWindowHiddenState';
 
 /**
- * 公式ギャラリー表示中に非表示にするボタンのID一覧。
- * Text_styling 関連のボタンが他にもあれば、ここに追記する。
+ * 公式ギャラリー表示中に非表示にする要素を CSS セレクタで指定する。
+ * - ID でもクラスでも属性でも何でも指定可能
+ * - 存在しないセレクタは単に無視される
  */
-const GALLERY_HIDDEN_BUTTON_IDS = [
-    'toggle-chat-button',      // 💡 Chat_window_onoff
-    'restore-panel-button',    // ⚙ Text_styling を開くボタン（推定）
+const GALLERY_HIDDEN_SELECTORS = [
+    // Chat_window_onoff（💡ボタン）
+    '#toggle-chat-button',
+
+    // Text_styling 関連（ウィンドウ操作ボタン）
+    '#window-control-buttons',      // 中央 / 右半分ボタンを内包するコンテナ
+    '#center-button',               // 個別指定（保険）
+    '#right-half-button',           // 個別指定（保険）
+    '#restore-panel-button',        // ⚙アイコン（存在すれば）
 ];
 
 /**
