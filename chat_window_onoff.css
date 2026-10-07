@@ -1,4 +1,4 @@
-/* チャット表示/非表示切り替えボタン  *//* チャット表示/非表示切り替えボタン  */
+/* チャット表示/非表示切り替えボタン  */
 #toggle-chat-button {
     position: fixed;
     /*  ⚙アイコン(left:10px, width:40px)の隣に配置するため、10px + 40px + 10px(間隔) = 60px に設定  */
@@ -100,4 +100,50 @@ body.chat-window-is-hidden #sheldheader {
     #form_sheld * {
         pointer-events: auto !important;
     }
+}
+
+/* ============================================================ */
+/* 3. Text_styling: 中央 / 右半分ボタンを左へ 20px 移動           */
+/* ============================================================ */
+#window-control-buttons {
+    transform: translateX(-20px) !important;
+}
+
+/* ============================================================ */
+/* 4. 左下のボタン群: 普段は完全透明、左下の起動領域に入ると半透明 */
+/* ============================================================ */
+
+/* --- 通常時（起動領域の外）: 完全透明 --- */
+#toggle-chat-button,
+#image-control-container,
+#image-control-container button,
+#gic-release-override-button,
+#gic-open-gallery-button,
+#window-control-buttons,
+#window-control-buttons button,
+#restore-panel-button {
+    opacity: 0 !important;
+    transition: opacity 0.15s ease !important;
+}
+
+/* --- マウスが起動領域（左下 360px × 180px）に入った時: 半透明 --- */
+body.gic-buttons-wake #toggle-chat-button,
+body.gic-buttons-wake #image-control-container,
+body.gic-buttons-wake #image-control-container button,
+body.gic-buttons-wake #gic-release-override-button,
+body.gic-buttons-wake #gic-open-gallery-button,
+body.gic-buttons-wake #window-control-buttons,
+body.gic-buttons-wake #window-control-buttons button,
+body.gic-buttons-wake #restore-panel-button {
+    opacity: 0.12 !important;
+}
+
+/* --- 起動領域内でのホバー時は完全不透明（操作性のため） --- */
+body.gic-buttons-wake #toggle-chat-button:hover,
+body.gic-buttons-wake #image-control-container button:hover,
+body.gic-buttons-wake #gic-release-override-button:hover,
+body.gic-buttons-wake #gic-open-gallery-button:hover,
+body.gic-buttons-wake #window-control-buttons button:hover,
+body.gic-buttons-wake #restore-panel-button:hover {
+    opacity: 1 !important;
 }
