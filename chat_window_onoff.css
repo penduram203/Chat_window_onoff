@@ -147,7 +147,7 @@ body.gic-buttons-wake #gic-open-gallery-button,
 body.gic-buttons-wake #center-button,
 body.gic-buttons-wake #right-half-button,
 body.gic-buttons-wake #restore-panel-button {
-    opacity: 0.30 !important;
+    opacity: 0.3 !important;
 }
 
 /* --- 起動領域内でのホバー時は完全不透明（操作性のため） --- */
@@ -162,4 +162,52 @@ body.gic-buttons-wake #center-button:hover,
 body.gic-buttons-wake #right-half-button:hover,
 body.gic-buttons-wake #restore-panel-button:hover {
     opacity: 1 !important;
+}
+
+/* ============================================================ */
+/* 5. 左下ボタンの外観統一                                        */
+/*    中央・右半分（Text_styling）と全画面（Image_display）を    */
+/*    他の長方形ボタンと同じ見た目に揃える                         */
+/* ============================================================ */
+
+/* 基準スタイル: 背景 #444 / 白文字 / 1px solid #666 / padding 6px 12px */
+#text-mode-button,
+#custom-button,
+#maximize-button,
+#half-maximize-button,
+#center-button,
+#right-half-button {
+    background-color: #444 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    border: 1px solid #666 !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    font-family: inherit !important;
+    font-weight: normal !important;
+    border-radius: 4px !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    line-height: normal !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    box-sizing: content-box !important;
+}
+
+/* 無効化された全画面ボタンも同じ外観に（押せないのは cursor で示す） */
+#maximize-button.disabled {
+    background-color: #444 !important;
+    color: #ffffff !important;
+    border: 1px solid #666 !important;
+    cursor: not-allowed !important;
+}
+
+/* ホバー時の背景色も統一 */
+body.gic-buttons-wake #text-mode-button:hover,
+body.gic-buttons-wake #custom-button:hover,
+body.gic-buttons-wake #maximize-button:hover,
+body.gic-buttons-wake #half-maximize-button:hover,
+body.gic-buttons-wake #center-button:hover,
+body.gic-buttons-wake #right-half-button:hover {
+    background-color: #666 !important;
 }
