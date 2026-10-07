@@ -147,7 +147,7 @@ body.gic-buttons-wake #gic-open-gallery-button,
 body.gic-buttons-wake #center-button,
 body.gic-buttons-wake #right-half-button,
 body.gic-buttons-wake #restore-panel-button {
-    opacity: 0.36 !important;
+    opacity: 0.30 !important;
 }
 
 /* --- 起動領域内でのホバー時は完全不透明（操作性のため） --- */
