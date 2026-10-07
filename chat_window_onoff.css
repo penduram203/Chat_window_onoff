@@ -107,7 +107,7 @@ body.chat-window-is-hidden #sheldheader {
 /* ============================================================ */
 #center-button,
 #right-half-button {
-    transform: translate(-20px, -10px) !important;
+    transform: translate(-20px, -8px) !important;
 }
 
 /* ============================================================ */
