@@ -26,6 +26,13 @@ const GALLERY_HIDDEN_SELECTORS = [
 ];
 
 /**
+ * 左下の「ボタン起動領域」のサイズ(px)。
+ * 画面左下を原点に、右へ WAKE_WIDTH、上へ WAKE_HEIGHT の長方形。
+ */
+const BUTTON_WAKE_WIDTH = 360;
+const BUTTON_WAKE_HEIGHT = 180;
+
+/**
  * 設定を取得・初期化（旧localStorageからの自動マイグレーションを含む）
  */
 function getSettings() {
@@ -242,7 +249,6 @@ setupChatPaddingClickThrough();
 // ===== ギャラリー連動：公式ギャラリー表示中は対象要素を非表示 =====
 // ===================================================================
 
-// ギャラリー開閉判定のキャッシュ（重いDOM読みを毎回呼ばない）
 let _galleryOpenCache = { value: false, timestamp: 0 };
 const GALLERY_OPEN_CACHE_TTL = 100;
 
@@ -321,13 +327,58 @@ function syncButtonsVisibilityForGallery() {
 }
 
 function setupGalleryButtonObserver() {
-    // MutationObserver は撤去。
-    // document.body の style/class 監視は、他拡張（GICなど）の書き込みに
-    // 反応してフィードバックループを起こし、メインスレッドを飽和させる。
-    // 300ms ポーリングのみで開閉検知には十分。
     setInterval(syncButtonsVisibilityForGallery, 300);
     syncButtonsVisibilityForGallery();
     console.log('[Chat Window On/Off] 📷 ギャラリー連動監視を開始しました（ポーリング方式）');
 }
 
 setupGalleryButtonObserver();
+
+// ===================================================================
+// ===== 左下のボタン起動領域：マウス位置に応じて半透明⇔完全透明 =====
+// ===================================================================
+
+/**
+ * 左下の長方形領域にマウスが入った時だけ
+ * body に "gic-buttons-wake" クラスを付与する。
+ * クラスが無い状態では CSS 側で opacity: 0 !important となり、
+ * 左下のボタン群（GIC / Text_styling / Image_display / Chat_window_onoff）が
+ * すべて完全透明になる。
+ */
+function setupButtonWakeZone() {
+    const WAKE_W = BUTTON_WAKE_WIDTH;
+    const WAKE_H = BUTTON_WAKE_HEIGHT;
+    let isInZone = false;
+
+    function isInside(x, y) {
+        // 左下(0, innerHeight) を原点に、右へ WAKE_W、上へ WAKE_H の長方形
+        return x >= 0 && x <= WAKE_W &&
+               y >= window.innerHeight - WAKE_H && y <= window.innerHeight;
+    }
+
+    function update(x, y) {
+        const inside = isInside(x, y);
+        if (inside === isInZone) return;
+        isInZone = inside;
+        document.body.classList.toggle('gic-buttons-wake', inside);
+    }
+
+    // マウス移動で判定
+    document.addEventListener('mousemove', (e) => {
+        update(e.clientX, e.clientY);
+    }, { passive: true });
+
+    // ウィンドウ外に出たら完全透明に戻す
+    document.addEventListener('mouseleave', () => {
+        update(-1, -1);
+    });
+    window.addEventListener('blur', () => {
+        update(-1, -1);
+    });
+
+    // 初期状態は「完全透明」
+    document.body.classList.remove('gic-buttons-wake');
+    console.log(`[Chat Window On/Off] 🖱 ボタン起動領域を設定: ${WAKE_W}px × ${WAKE_H}px (左下)`);
+}
+
+setupButtonWakeZone();
