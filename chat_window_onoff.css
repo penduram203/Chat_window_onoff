@@ -105,7 +105,8 @@ body.chat-window-is-hidden #sheldheader {
 /* ============================================================ */
 /* 3. Text_styling: 中央 / 右半分ボタンを左へ 20px 移動           */
 /* ============================================================ */
-#window-control-buttons {
+#center-button,
+#right-half-button {
     transform: translate(-20px, -10px) !important;
 }
 
