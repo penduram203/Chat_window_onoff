@@ -82,7 +82,7 @@ body.chat-window-is-hidden #sheldheader {
         -webkit-background-clip: content-box !important;
     }
     
-        /* ボタン群 */
+    /* ボタン群の z-index / pointer-events */
     #image-control-container,
     #toggle-chat-button,
     #window-control-buttons,
@@ -113,14 +113,24 @@ body.chat-window-is-hidden #sheldheader {
 /* 4. 左下のボタン群: 普段は完全透明、左下の起動領域に入ると半透明 */
 /* ============================================================ */
 
-/* --- 通常時（起動領域の外）: 完全透明 --- */
-#toggle-chat-button,
+/* ★ 重要: 親コンテナの opacity は 1 に固定
+      子ボタンとの opacity が掛け算されるのを防ぐ */
 #image-control-container,
-#image-control-container button,
+#window-control-buttons {
+    opacity: 1 !important;
+}
+
+/* --- 通常時（起動領域の外）: ボタンは完全透明 --- */
+/* 葉ノードのボタンのみを直接制御する */
+#toggle-chat-button,
+#text-mode-button,
+#custom-button,
+#maximize-button,
+#half-maximize-button,
 #gic-release-override-button,
 #gic-open-gallery-button,
-#window-control-buttons,
-#window-control-buttons button,
+#center-button,
+#right-half-button,
 #restore-panel-button {
     opacity: 0 !important;
     transition: opacity 0.15s ease !important;
@@ -128,22 +138,28 @@ body.chat-window-is-hidden #sheldheader {
 
 /* --- マウスが起動領域（左下 360px × 180px）に入った時: 半透明 --- */
 body.gic-buttons-wake #toggle-chat-button,
-body.gic-buttons-wake #image-control-container,
-body.gic-buttons-wake #image-control-container button,
+body.gic-buttons-wake #text-mode-button,
+body.gic-buttons-wake #custom-button,
+body.gic-buttons-wake #maximize-button,
+body.gic-buttons-wake #half-maximize-button,
 body.gic-buttons-wake #gic-release-override-button,
 body.gic-buttons-wake #gic-open-gallery-button,
-body.gic-buttons-wake #window-control-buttons,
-body.gic-buttons-wake #window-control-buttons button,
+body.gic-buttons-wake #center-button,
+body.gic-buttons-wake #right-half-button,
 body.gic-buttons-wake #restore-panel-button {
     opacity: 0.12 !important;
 }
 
 /* --- 起動領域内でのホバー時は完全不透明（操作性のため） --- */
 body.gic-buttons-wake #toggle-chat-button:hover,
-body.gic-buttons-wake #image-control-container button:hover,
+body.gic-buttons-wake #text-mode-button:hover,
+body.gic-buttons-wake #custom-button:hover,
+body.gic-buttons-wake #maximize-button:hover,
+body.gic-buttons-wake #half-maximize-button:hover,
 body.gic-buttons-wake #gic-release-override-button:hover,
 body.gic-buttons-wake #gic-open-gallery-button:hover,
-body.gic-buttons-wake #window-control-buttons button:hover,
+body.gic-buttons-wake #center-button:hover,
+body.gic-buttons-wake #right-half-button:hover,
 body.gic-buttons-wake #restore-panel-button:hover {
     opacity: 1 !important;
 }
