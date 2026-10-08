@@ -6,10 +6,11 @@
     bottom: 40px;
     width: 40px;
     height: 40px;
-    background-color: #000;
+    /* ★ 丸 → 四角に変更 */
+    background-color: #444;
     color: white;
-    border: none;
-    border-radius: 50%;
+    border: 1px solid #666;
+    border-radius: 4px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -21,6 +22,7 @@
     transition: opacity 0.0s, background-color 0.0s;
 }
 
+/* ★ ホバー時も背景色は同じ（#444）のままにする */
 #toggle-chat-button:hover {
     opacity: 1;
     background-color: #444;
@@ -28,7 +30,8 @@
 
 /*  ボタンがアクティブ（チャット透過中）な時のスタイル  */
 #toggle-chat-button.active {
-    background-color: #000000;
+    /* ★ 背景色を他のボタンと統一 */
+    background-color: #444;
     opacity: 0.1;
 }
 
@@ -103,11 +106,13 @@ body.chat-window-is-hidden #sheldheader {
 }
 
 /* ============================================================ */
-/* 3. Text_styling: 中央 / 右半分ボタンを左へ 20px 移動           */
+/* 3. Text_styling: 中央 / 右半分ボタンを左へ 20px・上へ 10px 移動 */
+/*    ※ 子ボタンが position: fixed のため、親の transform ではなく */
+/*      子ボタン自身を transform で移動させる                       */
 /* ============================================================ */
 #center-button,
 #right-half-button {
-    transform: translate(-20px, -8px) !important;
+    transform: translate(-20px, -10px) !important;
 }
 
 /* ============================================================ */
