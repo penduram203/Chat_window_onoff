@@ -3,7 +3,7 @@
     position: fixed;
     /*  ⚙アイコン(left:10px, width:40px)の隣に配置するため、10px + 40px + 10px(間隔) = 60px に設定  */
     /* ★ サイズ縮小 (40→30) に合わせて中心を維持するため left/bottom を +5px */
-    left: 49px;
+    left: 47px;
     bottom: 48px;
     width: 32px;
     height: 32px;
@@ -242,7 +242,7 @@ body.gic-buttons-wake #right-half-button:hover {
     box-sizing: border-box !important;
     text-shadow: none !important;
     /* ★ 右に 5px、上に 5px 移動 */
-    transform: translate(2px, -8px) !important;
+    transform: translate(0px, -8px) !important;
 }
 
 /* ホバー時も背景色は同じ（点灯時のみ背景色が変わる挙動を無効化） */
