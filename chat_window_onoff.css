@@ -242,7 +242,7 @@ body.gic-buttons-wake #right-half-button:hover {
     box-sizing: border-box !important;
     text-shadow: none !important;
     /* ★ 右に 5px、上に 5px 移動 */
-    transform: translate(-7px, -8px) !important;
+    transform: translate(-9px, -8px) !important;
 }
 
 /* ホバー時も背景色は同じ（点灯時のみ背景色が変わる挙動を無効化） */
