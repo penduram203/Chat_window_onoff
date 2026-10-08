@@ -219,3 +219,39 @@ body.gic-buttons-wake #center-button:hover,
 body.gic-buttons-wake #right-half-button:hover {
     background-color: #666 !important;
 }
+
+/* ============================================================ */
+/* 6. Text_styling ⚙ アイコン: 丸 → 四角 + 背景色統一            */
+/* ============================================================ */
+
+/* 通常時も背景色を付与し、四角に */
+#restore-panel-button {
+    width: 32px !important;
+    height: 32px !important;
+    background-color: #444 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+    border: 1px solid #666 !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 18px !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    text-shadow: none !important;
+}
+
+/* ホバー時も背景色は同じ（点灯時のみ背景色が変わる挙動を無効化） */
+#restore-panel-button:hover {
+    background-color: #444 !important;
+    color: #ffffff !important;
+}
+
+/* active / 選択中などの状態でも背景色を統一 */
+#restore-panel-button.active,
+#restore-panel-button.selected {
+    background-color: #444 !important;
+    color: #ffffff !important;
+}
