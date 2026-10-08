@@ -4,9 +4,9 @@
     /*  ⚙アイコン(left:10px, width:40px)の隣に配置するため、10px + 40px + 10px(間隔) = 60px に設定  */
     /* ★ サイズ縮小 (40→30) に合わせて中心を維持するため left/bottom を +5px */
     left: 55px;
-    bottom: 50px;
-    width: 30px;
-    height: 30px;
+    bottom: 45px;
+    width: 32px;
+    height: 32px;
     /* ★ 丸 → 四角に変更 */
     background-color: #444;
     color: white;
